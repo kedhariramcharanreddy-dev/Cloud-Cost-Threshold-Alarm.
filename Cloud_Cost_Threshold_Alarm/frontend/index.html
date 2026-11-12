@@ -1,0 +1,50 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Cost Alarm | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">₿</div><div><strong>CloudGuard</strong><small>COST MONITOR</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-item active" href="#overview"><span>▦</span> Overview</a>
+    <a class="nav-item" href="#budget"><span>◈</span> Budget settings</a>
+    <a class="nav-item" href="#alerts"><span>♧</span> Alert centre</a>
+    <a class="nav-item" href="#device"><span>⌁</span> IoT device</a>
+    <div class="sidebar-bottom"><div class="side-status"><i></i><span>Dashboard online</span></div><small>Cloud Cost Threshold Alarm<br>Prototype v1.0</small></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">CLOUD OPERATIONS / MONITORING</div><h1>Cost overview</h1><p class="subhead">Track your AWS spend and stay ahead of your budget.</p></div>
+      <div class="top-actions"><span class="demo-pill" id="dataSource">DEMO DATA</span><button class="icon-btn" id="refreshBtn" title="Refresh">↻</button><div class="avatar">CC</div></div>
+    </header>
+    <div id="errorBanner" class="banner hidden"></div>
+    <section class="metrics" id="overview">
+      <article class="metric-card"><div class="metric-top"><span>MONTH-TO-DATE SPEND</span><span class="metric-icon teal">↗</span></div><div class="metric-value" id="spendValue">$0.00</div><div class="metric-foot"><span class="muted">Current billing month</span><span class="tiny-tag">LIVE VIEW</span></div></article>
+      <article class="metric-card"><div class="metric-top"><span>MONTHLY BUDGET</span><span class="metric-icon blue">◫</span></div><div class="metric-value" id="budgetValue">$100.00</div><div class="metric-foot"><span class="muted">Your spending limit</span><a href="#budget">Edit budget ↗</a></div></article>
+      <article class="metric-card"><div class="metric-top"><span>WARNING THRESHOLD</span><span class="metric-icon amber">⚑</span></div><div class="metric-value" id="thresholdValue">$80.00</div><div class="metric-foot"><span class="muted" id="thresholdPercent">At 80% of budget</span><span class="muted">Early warning</span></div></article>
+      <article class="metric-card"><div class="metric-top"><span>REMAINING BUDGET</span><span class="metric-icon green">✓</span></div><div class="metric-value" id="remainingValue">$0.00</div><div class="progress-track"><div id="budgetProgress" class="progress-fill"></div></div><div class="metric-foot"><span class="muted" id="usedPercent">0% used</span><span class="muted" id="statusText">NORMAL</span></div></article>
+    </section>
+    <section class="content-grid">
+      <article class="panel chart-panel"><div class="panel-heading"><div><h2>Daily spending</h2><p>Daily AWS cost for the current month</p></div><span class="legend"><i></i> Daily spend</span></div><div class="chart-wrap"><canvas id="spendChart"></canvas></div></article>
+      <article class="panel status-panel"><div class="panel-heading"><div><h2>Budget health</h2><p>Current threshold evaluation</p></div></div><div class="health-ring" id="healthRing"><div><strong id="healthPercent">0%</strong><small>OF BUDGET</small></div></div><div class="status-line"><span class="status-dot" id="statusDot"></span><strong id="healthStatus">NORMAL</strong></div><p class="health-note" id="healthNote">Spending is within your configured budget.</p><div class="health-breakdown"><div><span>Spent</span><b id="healthSpent">$0.00</b></div><div><span>Limit</span><b id="healthLimit">$100.00</b></div></div></article>
+    </section>
+    <section class="lower-grid">
+      <article class="panel" id="budget"><div class="panel-heading"><div><h2>Budget settings</h2><p>Set your monthly cost limit and alert level.</p></div><span class="panel-symbol">⚙</span></div>
+        <form id="settingsForm" class="settings-form"><label>Monthly budget <div class="input-wrap"><span>$</span><input id="budgetInput" type="number" min="0.01" step="0.01" required></div></label><label>Warning threshold <div class="input-wrap percent"><input id="warningInput" type="number" min="1" max="99" step="1" required><span>%</span></div></label><button class="primary-btn" type="submit">Save budget settings <span>→</span></button><div class="form-message" id="settingsMessage"></div></form>
+      </article>
+      <article class="panel" id="device"><div class="panel-heading"><div><h2>IoT device status</h2><p>ESP32 notification unit</p></div><span class="device-icon">⌁</span></div><div class="device-row"><div class="device-graphic">▣</div><div><strong>ESP32 Cost Alarm</strong><small>OLED · LED · Buzzer</small></div><span id="deviceBadge" class="connection-badge offline">OFFLINE</span></div><div class="device-details"><div><span>Connection</span><b id="deviceConnection">Not connected</b></div><div><span>Last heartbeat</span><b id="deviceLastSeen">No heartbeat received</b></div><div><span>Last device status</span><b id="deviceLastStatus">UNKNOWN</b></div></div><p class="device-hint">The device is marked online only after a recent heartbeat is received.</p></article>
+    </section>
+    <section class="panel alerts-panel" id="alerts"><div class="panel-heading"><div><h2>Recent alerts</h2><p>Threshold events and test notifications</p></div><button class="outline-btn" id="testAlertBtn">＋ Test alert</button></div><div class="alert-table-wrap"><table><thead><tr><th>EVENT</th><th>SPENDING</th><th>BUDGET</th><th>TIME</th><th>STATUS</th></tr></thead><tbody id="alertRows"><tr><td colspan="5" class="empty">No alerts yet. Use “Test alert” to verify the alert centre.</td></tr></tbody></table></div></section>
+    <footer><span>CloudGuard · Cloud Cost Threshold Alarm</span><span>Prototype dashboard · Secure your cloud spend</span></footer>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/dashboard.js"></script>
+</body></html>

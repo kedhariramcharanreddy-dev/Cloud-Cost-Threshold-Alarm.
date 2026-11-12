@@ -1,0 +1,8 @@
+{
+  "alerts": [],
+  "device": {
+    "connected": false,
+    "last_seen": null,
+    "last_status": "UNKNOWN"
+  }
+}
